@@ -30,34 +30,32 @@ function generateTasks() {
   taskList.innerHTML = "";
 
   for (let i = 0; i < tasks.length; i++) {
+    
     const task = tasks[i];
     const taskCard = document.createElement("div");
-    taskCard.classList.add("task-card" , "show");
+    taskCard.classList.add("task-card", "show");
 
     const taskContent = document.createElement("div");
     taskContent.classList.add("task-card-content");
     taskContent.innerHTML = `
     <strong>Task:</strong> ${task.name} <br>
     <strong>Deadline:</strong> ${task.deadline} <br>
-    ${
-      task.description? `<strong>Description:</strong> ${task.description} `: ""
-    }
-  `;
-  taskCard.appendChild(taskContent);
+    ${task.description ? `<strong>Description:</strong> ${task.description} ` : ""}`;
+    
+    taskCard.appendChild(taskContent);
 
-const taskActions =document.createElement("div");
-taskActions.classList.add("task-card-actions");
-
-
+    const taskActions = document.createElement("div");
+    taskActions.classList.add("task-card-actions");
     const status = document.createElement("span");
     status.classList.add("status");
+
     const currentDate = new Date();
     const deadlineDate = new Date(task.deadline);
     const timeDifference = deadlineDate - currentDate;
     const daysUntilDeadline = timeDifference / (1000 * 60 * 60 * 24);
-    const text = document.createElement("span");
     // const statusIcon = document.createElement("i");
 
+    const text = document.createElement("span");
     if (task.completed) {
       text.innerText = "Done";
     } else if (daysUntilDeadline < 0) {
@@ -74,15 +72,14 @@ taskActions.classList.add("task-card-actions");
 
     status.appendChild(text);
     // status.appendChild(statusIcon);
-  
 
-  const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.checked = task.completed;
-  checkbox.addEventListener("change", function () {
-  task.completed = checkbox.checked;
-  generateTasks();
-});
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = task.completed;
+    checkbox.addEventListener("change", function () {
+      task.completed = checkbox.checked;
+      generateTasks();
+    });
 
     const editButton = document.createElement("button");
     editButton.textContent = "Edit";
@@ -93,26 +90,27 @@ taskActions.classList.add("task-card-actions");
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "Delete";
     deleteButton.addEventListener("click", function () {
-      deleteTask(task.id);
+      deleteTask(i);
     });
 
-   // Append everything to the action section
-  //  taskActions.appendChild(checkbox);
-  status.appendChild(checkbox);
-   taskActions.appendChild(status);
-   taskActions.appendChild(editButton);
-   taskActions.appendChild(deleteButton);
+    // Append everything to the action section
+    
+    status.appendChild(checkbox);
 
-   // Append the icon to the status span
-  //  status.appendChild(statusIcon);
+    taskActions.appendChild(status);
+    taskActions.appendChild(editButton);
+    taskActions.appendChild(deleteButton);
 
-   // Append action section to the task card
-   taskCard.appendChild(taskContent);
-   taskCard.appendChild(taskActions);
 
-   taskList.appendChild(taskCard);
+    // Append action section to the task card
+    taskCard.appendChild(taskContent);
+    taskCard.appendChild(taskActions);
 
-    setTimeout(() => taskCard.classList.add("show"), 10);
+    taskList.appendChild(taskCard);
+
+    // setTimeout(() => taskCard.classList.add("show"), 300);
+
+
   }
 }
 
@@ -174,11 +172,12 @@ function enterEditMode(taskElement, task) {
   taskElement.appendChild(saveButton);
 
   taskElement.style.padding = "20px";
-  taskElement.style.minHeight = "auto";
+  taskElement.style.width = " fit-content";
 }
 
-function deleteTask(taskId) {
-  tasks = tasks.filter((task) => task.id !== taskId);
+function deleteTask(i) {
+  // tasks = tasks.filter((task) => task.id !== taskId);
+  tasks.splice(i,1);
   generateTasks();
 }
 
